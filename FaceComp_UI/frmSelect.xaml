@@ -1,0 +1,20 @@
+﻿<Window x:Class="FaceComp.frmSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FaceComp"
+        mc:Ignorable="d"
+        Title="FaceComp" Height="475" Width="719.445" Icon="Icon/webcam_64.png" ResizeMode="NoResize">
+    <Grid>
+        <Image Source="Image/facial-recognition.jpg" Stretch="UniformToFill" Grid.ColumnSpan="2">
+            <Image.Effect>
+                <BlurEffect Radius="10"/>
+            </Image.Effect>
+        </Image>
+        <Button x:Name="btnShowCompareForm" Content="Compare face" HorizontalAlignment="Left" Margin="26,180,0,0" VerticalAlignment="Top" Width="298" Height="82" FontSize="36" FontWeight="Bold" Background="#FF2DA0FF" Foreground="White" FontFamily="Tahoma" Click="Button1_Click"/>
+        <Button x:Name="btnShowSearchForm" Content="Search face" HorizontalAlignment="Left" Margin="386,179,0,0" VerticalAlignment="Top" Width="298" Height="82" FontSize="30" FontWeight="Bold" Background="#FF2DA0FF" Foreground="White" FontFamily="Tahoma" Click="Button2_Click" Grid.ColumnSpan="2"/>
+        <Label x:Name="label" Content="https://viscomsolution.com" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="#FF0021B6" FontSize="18" Background="{x:Null}" OpacityMask="#FFB91818" MouseUp="Label_MouseUp"/>
+
+    </Grid>
+</Window>
