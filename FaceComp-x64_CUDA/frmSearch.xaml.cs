@@ -89,6 +89,7 @@ namespace FaceComp
             if (videosources.Count == 0)
             {
                 MessageBox.Show("Can not find camera");
+                return;
             }
 
 
@@ -198,8 +199,7 @@ namespace FaceComp
             if (ofd.FileName != "")
             {
                 m_imagePath = ofd.FileName;
-                Uri fileUri = new Uri(ofd.FileName);
-                picturebox1.Source = new BitmapImage(fileUri);
+                picturebox1.Source = TGMTimage.LoadImageWithoutLock(m_imagePath);
             }
         }
 
@@ -284,8 +284,7 @@ namespace FaceComp
                         else
                             lblPercent.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00));
 
-                        Uri fileUri = new Uri(filePath);
-                        picturebox2.Source = new BitmapImage(fileUri);
+                        picturebox2.Source = TGMTimage.LoadImageWithoutLock(filePath);
 
                         m_result = filePath;
                     }
@@ -310,8 +309,10 @@ namespace FaceComp
             if (m_videoSource != null)
                 m_videoSource.Stop();
 
-            imageTaken.Save("img1.jpg", ImageFormat.Jpeg);
-            m_imagePath = "img1.jpg";
+            string datetime = DateTime.Now.AddHours(7).ToString("yyyy-MM-dd-hh-mm-ss") + ".jpg";
+
+            imageTaken.Save(datetime, ImageFormat.Jpeg);
+            m_imagePath = datetime;
 
             label1.Visibility = Visibility.Hidden;
             cbWebcam.Visibility = Visibility.Hidden;

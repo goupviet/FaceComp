@@ -22,6 +22,7 @@ using System.Threading;
 using AForge.Video;
 using System.ComponentModel;
 using System.Windows.Threading;
+using TGMTcs;
 
 namespace FaceComp
 {
@@ -107,6 +108,17 @@ namespace FaceComp
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        void Compare()
+        {
+            Thread t1 = new Thread(new ThreadStart(GetSimilarPercent));
+            t1.Start();
+
+            Thread t2 = new Thread(new ThreadStart(DrawLandmarkAndSave));
+            t2.Start();
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         void GetSimilarPercent()
         {
@@ -116,17 +128,45 @@ namespace FaceComp
                 int percent = faceCompMgr.GetSimilarPercent(imagePath1, imagePath2);
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
-
-                label.Content = percent + "% (" + elapsedMs + "ms)";
-
-                if (percent >= faceCompMgr.Thresh)
-                    label.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x00, 0xBB, 0x3C));
-                else
-                    label.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00));
-            }
-            else
-            {
                 
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    label.Content = percent + "% (" + elapsedMs + "ms)";
+                    if (percent >= faceCompMgr.Thresh)
+                        label.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0x00, 0xBB, 0x3C));
+                    else
+                        label.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, 0xFF, 0x00, 0x00));
+                });
+                
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        void DrawLandmarkAndSave()
+        {
+            if (imagePath1 != null && imagePath2 != null && imagePath1 != "" && imagePath2 != "")
+            {
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                string imageOutputPath1 = Directory.GetCurrentDirectory() + "\\result1.jpg";
+                string imageOutputPath2 = Directory.GetCurrentDirectory() + "\\result2.jpg";
+                faceCompMgr.DrawLandmarkAndSave(imagePath1, imageOutputPath1);
+                faceCompMgr.DrawLandmarkAndSave(imagePath2, imageOutputPath2);
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    imageResult1.Source = TGMTimage.LoadImageWithoutLock(imageOutputPath1);
+                });
+
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    imageResult2.Source = TGMTimage.LoadImageWithoutLock(imageOutputPath2);
+                });
+
             }
         }
 
@@ -140,11 +180,10 @@ namespace FaceComp
             if (ofd.FileName != "")
             {
                 imagePath1 = ofd.FileName;
-                Uri fileUri = new Uri(ofd.FileName);
-                image1.Source = new BitmapImage(fileUri);
+                image1.Source = TGMTimage.LoadImageWithoutLock(imagePath1);
             }
 
-            GetSimilarPercent();
+            Compare();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,11 +196,10 @@ namespace FaceComp
             if (ofd.FileName != "")
             {
                 imagePath2 = ofd.FileName;
-                Uri fileUri = new Uri(ofd.FileName);
-                image2.Source = new BitmapImage(fileUri);
+                image2.Source = TGMTimage.LoadImageWithoutLock(imagePath2);
             }
 
-            GetSimilarPercent();
+            Compare();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,6 +260,7 @@ namespace FaceComp
             if (videosources.Count == 0)
             {
                 MessageBox.Show("Can not find camera");
+                return;
             }
 
 
@@ -332,15 +371,17 @@ namespace FaceComp
             if (m_videoSource != null)
                 m_videoSource.Stop();
 
-            imageTaken.Save("img1.jpg", ImageFormat.Jpeg);
-            imagePath1 = "img1.jpg";
+            string datetime = DateTime.Now.AddHours(7).ToString("yyyy-MM-dd-hh-mm-ss") + ".jpg";
+
+            imageTaken.Save(datetime, ImageFormat.Jpeg);
+            imagePath2 = datetime;
 
             label1.Visibility = Visibility.Hidden;
             cbWebcam1.Visibility = Visibility.Hidden;
             btnSnapshot1.Visibility = Visibility.Hidden;
             btnWebcam1.Visibility = Visibility.Visible;
 
-            GetSimilarPercent();
+            Compare();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,15 +391,17 @@ namespace FaceComp
             if (m_videoSource != null)
                 m_videoSource.Stop();
 
-            imageTaken.Save("img2.jpg", ImageFormat.Jpeg);
-            imagePath2 = "img2.jpg";
+            string datetime = DateTime.Now.AddHours(7).ToString("yyyy-MM-dd-hh-mm-ss") + ".jpg";
+
+            imageTaken.Save(datetime, ImageFormat.Jpeg);
+            imagePath2 = datetime;
 
             label2.Visibility = Visibility.Hidden;
             cbWebcam2.Visibility = Visibility.Hidden;
             btnSnapshot2.Visibility = Visibility.Hidden;
             btnWebcam2.Visibility = Visibility.Visible;
 
-            GetSimilarPercent();
+            Compare();
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,19 +27,39 @@ namespace FaceComp
 
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            frmCompare frm = new frmCompare();
-            frm.Closed += Frm_Closed;
-            frm.ShowDialog();            
+            frmCompare frm = null;
+            try
+            {
+                this.Hide();
+                frm = new frmCompare();
+                frm.Closed += Frm_Closed;
+                frm.ShowDialog();                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Chưa cài đặt CUDA hoặc C++ redistributable 2015");
+                if(frm != null)
+                    frm.Close();
+            }
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            frmSearch frm = new frmSearch();
-            frm.Closed += Frm_Closed;
-            frm.ShowDialog();
-            
+            frmSearch frm = null;
+            try
+            {
+                this.Hide();
+                frm = new frmSearch();
+                frm.Closed += Frm_Closed;
+                frm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Chưa cài đặt CUDA hoặc C++ redistributable 2015");
+
+                if (frm != null)
+                    frm.Close();
+            }
         }
 
         private void Frm_Closed(object sender, EventArgs e)

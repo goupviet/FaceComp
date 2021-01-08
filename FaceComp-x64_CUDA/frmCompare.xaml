@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FaceComp"
         mc:Ignorable="d"
-        Title="Compare face" Height="567.5" Width="1018.5" Icon="Icon/webcam_64.png">
+        Title="Compare face" Height="819.5" Width="1018.5" Icon="Icon/webcam_64.png">
     <Grid OpacityMask="#FF18A451">
         <Image x:Name="image1" HorizontalAlignment="Left" Width="480" Margin="10,108,0,0" Height="320" VerticalAlignment="Top"/>
         <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="404,56,0,0" VerticalAlignment="Top" Foreground="Red" FontSize="20" FontWeight="Bold"/>
@@ -26,6 +26,8 @@
                Source="/Icon/take-photo-icon-64.png" MouseUp="BtnSnapshot1_MouseUp"/>
         <Image x:Name="btnSnapshot2" HorizontalAlignment="Left" Height="32" Margin="751,27,0,0" VerticalAlignment="Top" Width="32" 
                Source="/Icon/take-photo-icon-64.png" MouseUp="BtnSnapshot2_MouseUp"/>
-        <ProgressBar x:Name="progressbar" HorizontalAlignment="Left" Height="10" Margin="449,49,0,0" VerticalAlignment="Top" Width="100"/>
+        <ProgressBar x:Name="progressbar" HorizontalAlignment="Left" Height="37" Margin="374,56,0,0" VerticalAlignment="Top" Width="215"/>
+        <Image x:Name="imageResult1" HorizontalAlignment="Left" Width="480" Margin="10,449,0,0" Height="320" VerticalAlignment="Top"/>
+        <Image x:Name="imageResult2" RenderTransformOrigin="0.216,0.8" OpacityMask="#FFD11414" Height="320" Margin="495,449,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="480"/>
     </Grid>
 </Window>
